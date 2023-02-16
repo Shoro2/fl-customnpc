@@ -8,10 +8,20 @@
 # My module configuration
 ########################################
 #
-#    MyModule.Enable
+#    flcn.Enable
 #        Description: Enable my module and print "Hello World" message at server start
 #        Default:     0 - Disabled
 #                     1 - Enabled
 #
 
-MyModule.Enable = 0
+flcn.Enable = 1
+
+
+## Level Up NPC
+
+flcn.levelup.Enable = 1
+
+## Gurubashi Pvp Event
+
+flcn.pvpevent.Enable = 1
+flcn.gurumaster.Enable = 1
