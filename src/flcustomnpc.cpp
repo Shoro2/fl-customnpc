@@ -177,9 +177,9 @@ public:
                 //legion portalq
                 creature->SummonGameObject(185589, -13209.713867, 271.071564, 21.857899, 90, 0, 0, 0, 0, 600, true);
                 Creature* mySummon = creature->SummonCreature(510006, -13209.713867, 271.071564, 24.857899, 0.0, TEMPSUMMON_TIMED_DESPAWN, 600000);
-                mySummon->SetObjectScale(1.2);
-                //Player* myTarget = mySummon->SelectNearestPlayer(25.0);
-                //mySummon->_addAttacker(myTarget);
+                mySummon->SetObjectScale(0.5);
+                Player* myTarget = mySummon->SelectNearestPlayer(25.0);
+                mySummon->_addAttacker(myTarget);
                 CloseGossipMenuFor(player);
             }
         }
