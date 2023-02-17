@@ -27,9 +27,9 @@ public:
         {
             if (player->GetZoneId() == 33) {
                 double roll = rand_chance();
-                if(roll>=50) player->TeleportTo(0, -13217.698242, 183.740921, 53.279888, 1.398887);
-                else player->TeleportTo(0, -13270.440430, 212.779221, 52.390369, 0.723444);
                 player->ResurrectPlayer(100, false);
+                if(roll >= 50.0) player->TeleportTo(0, -13217.698242, 183.740921, 53.279888, 1.398887);
+                else player->TeleportTo(0, -13270.440430, 212.779221, 52.390369, 0.723444);
             }
         }
 
