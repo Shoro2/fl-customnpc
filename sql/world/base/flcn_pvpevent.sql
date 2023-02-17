@@ -1,14 +1,3 @@
-CREATE TABLE `acore_world`.`fl_gurupvp` (
-  `player` VARCHAR(45) NOT NULL,
-  `kills` INT NOT NULL,
-  `deaths` INT NOT NULL,
-  `spree` INT NOT NULL
-  PRIMARY KEY (`player`));
-  
-INSERT INTO `acore_world`.`gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcFlag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES ('62001', '0', '0', 'Spawn Forest', '0', '1', '1', '0', '0', '0', '0', '0', '0');
-INSERT INTO `acore_world`.`gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcFlag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES ('62001', '1', '0', 'Spawn Elevator', '0', '1', '1', '0', '0', '0', '0', '0', '0');
-INSERT INTO `acore_world`.`gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcFlag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES ('62001', '2', '0', 'Spawn Demon Gate', '0', '1', '1', '0', '0', '0', '0', '0', '0');
-
 INSERT INTO `acore_world`.`gossip_menu` (`MenuID`, `TextID`) VALUES ('62001', '1');
 
 INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction`, `npcflag`, `speed_walk`, `speed_run`, `speed_swim`, `speed_flight`, `detection_range`, `scale`, `rank`, `dmgschool`, `DamageModifier`, `BaseAttackTime`, `RangeAttackTime`, `BaseVariance`, `RangeVariance`, `unit_class`, `unit_flags`, `unit_flags2`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `HoverHeight`, `HealthModifier`, `ManaModifier`, `ArmorModifier`, `ExperienceModifier`, `RacialLeader`, `movementId`, `RegenHealth`, `mechanic_immune_mask`, `spell_school_immune_mask`, `flags_extra`, `ScriptName`, `VerifiedBuild`) VALUES
