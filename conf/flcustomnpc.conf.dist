@@ -25,3 +25,4 @@ flcn.levelup.Enable = 1
 
 flcn.pvpevent.Enable = 1
 flcn.gurumaster.Enable = 1
+flcn.portonrelease.Enable = 1

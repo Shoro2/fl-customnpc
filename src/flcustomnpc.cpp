@@ -22,6 +22,19 @@ public:
         }
     }
 
+    void OnPlayerReleasedGhost(Player* player) {
+        if (sConfigMgr->GetOption<bool>("flcn.portonrelease.Enable", true))
+        {
+            if (player->GetZoneId() == 33) {
+                double roll = rand_chance();
+                if(roll>=50) player->TeleportTo(0, -13217.698242, 183.740921, 53.279888, 1.398887);
+                else player->TeleportTo(0, -13270.440430, 212.779221, 52.390369, 0.723444);
+                player->ResurrectPlayer(100, false);
+            }
+        }
+
+    }
+
     void OnPVPKill(Player* killer, Player* killed) {
         if (sConfigMgr->GetOption<bool>("flcn.pvpevent.Enable", true))
         {
@@ -104,12 +117,12 @@ public:
 
     bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*sender*/, uint32 action) {
         if (sConfigMgr->GetOption<bool>("flcn.levelup.Enable", true)) {
-            if (action == 1 && player->GetLevel() < 80) {
+            if (action == 1 && player->getLevel() < 80) {
                 player->GiveLevel(80);
                 player->TeleportTo(727, 11585.527344, 12532.683594, -62.002, 5.136186);
                 player->ModifyMoney(20000000);
             }
-            else if (player->GetLevel() == 80) {
+            else if (player->getLevel() == 80) {
                 ChatHandler(player->GetSession()).SendSysMessage("You are already level 80, if you need help ask a GM.");
             }
         }
@@ -144,25 +157,25 @@ public:
             ClearGossipMenuFor(player);
             if (action == 1) {
                 //fake tree
-                creature->SummonGameObject(183492, -13237.378906, 272.936707, 21.856663, 90, 0, 0, 0, 0, 600, true, GO_SUMMON_TIMED_DESPAWN);
-                creature->SummonGameObject(183492, -13232.696289, 292.726685, 21.856663, 90, 0, 0, 0, 0, 600, true, GO_SUMMON_TIMED_DESPAWN);
-                creature->SummonGameObject(183492, -13182.932617, 253.628433, 21.856663, 90, 0, 0, 0, 0, 600, true, GO_SUMMON_TIMED_DESPAWN);
-                creature->SummonGameObject(183492, -13218.941406, 304.868369, 21.856663, 90, 0, 0, 0, 0, 600, true, GO_SUMMON_TIMED_DESPAWN);
-                creature->SummonGameObject(183492, -13195.192383, 307.406494, 21.856663, 90, 0, 0, 0, 0, 600, true, GO_SUMMON_TIMED_DESPAWN);
-                creature->SummonGameObject(183492, -13172.377930, 289.806458, 21.856663, 90, 0, 0, 0, 0, 600, true, GO_SUMMON_TIMED_DESPAWN);
-                creature->SummonGameObject(183492, -13169.080078, 268.401672, 21.856663, 90, 0, 0, 0, 0, 600, true, GO_SUMMON_TIMED_DESPAWN);
+                creature->SummonGameObject(183492, -13237.378906, 272.936707, 21.856663, 90, 0, 0, 0, 0, 600, true);
+                creature->SummonGameObject(183492, -13232.696289, 292.726685, 21.856663, 90, 0, 0, 0, 0, 600, true);
+                creature->SummonGameObject(183492, -13182.932617, 253.628433, 21.856663, 90, 0, 0, 0, 0, 600, true);
+                creature->SummonGameObject(183492, -13218.941406, 304.868369, 21.856663, 90, 0, 0, 0, 0, 600, true);
+                creature->SummonGameObject(183492, -13195.192383, 307.406494, 21.856663, 90, 0, 0, 0, 0, 600, true);
+                creature->SummonGameObject(183492, -13172.377930, 289.806458, 21.856663, 90, 0, 0, 0, 0, 600, true);
+                creature->SummonGameObject(183492, -13169.080078, 268.401672, 21.856663, 90, 0, 0, 0, 0, 600, true);
                 //camp fire
-                creature->SummonGameObject(194534, -13206.650391, 274.483765, 21.857222, 90, 0, 0, 0, 0, 600, true, GO_SUMMON_TIMED_DESPAWN);
+                creature->SummonGameObject(194534, -13206.650391, 274.483765, 21.857222, 90, 0, 0, 0, 0, 600, true);
                 CloseGossipMenuFor(player);
             }
             else if (action == 2) {
                 //elevator
-                creature->SummonGameObject(183490, -13209.713867, 271.071564, 21.857899, 90, 0, 0, 0, 0, 600, true, GO_SUMMON_TIMED_DESPAWN);
+                creature->SummonGameObject(183490, -13209.713867, 271.071564, 21.857899, 90, 0, 0, 0, 0, 600, true);
                 CloseGossipMenuFor(player);
             }
             else if (action == 3) {
                 //legion portalq
-                creature->SummonGameObject(185589, -13209.713867, 271.071564, 21.857899, 90, 0, 0, 0, 0, 600, true, GO_SUMMON_TIMED_DESPAWN);
+                creature->SummonGameObject(185589, -13209.713867, 271.071564, 21.857899, 90, 0, 0, 0, 0, 600, true);
                 Creature* mySummon = creature->SummonCreature(510006, -13209.713867, 271.071564, 24.857899, 0.0, TEMPSUMMON_TIMED_DESPAWN, 600000);
                 mySummon->SetObjectScale(1.2);
                 //Player* myTarget = mySummon->SelectNearestPlayer(25.0);
