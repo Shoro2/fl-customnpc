@@ -22,7 +22,7 @@ public:
         }
     }
 
-    void OnPlayerReleasedGhost(Player* player) {
+    void OnPlayerReleasedGhost(Player* player) override {
         if (sConfigMgr->GetOption<bool>("flcn.portonrelease.Enable", true))
         {
             if (player->GetZoneId() == 33) {
@@ -35,7 +35,7 @@ public:
 
     }
 
-    void OnPVPKill(Player* killer, Player* killed) {
+    void OnPVPKill(Player* killer, Player* killed) override {
         if (sConfigMgr->GetOption<bool>("flcn.pvpevent.Enable", true))
         {
             if (killed->GetAreaId() == 2177 && killer->GetName() != killed->GetName()) {
@@ -115,7 +115,7 @@ public:
     FLCNLevelUpCreature() : CreatureScript("FLCNLevelUpCreature") {}
 
 
-    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*sender*/, uint32 action) {
+    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*sender*/, uint32 action) override {
         if (sConfigMgr->GetOption<bool>("flcn.levelup.Enable", true)) {
             if (action == 1 && player->GetLevel() < 80) {
                 player->GiveLevel(80);
@@ -149,7 +149,7 @@ public:
 
 
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 sender, uint32 action) {
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 sender, uint32 action) override {
         if (sConfigMgr->GetOption<bool>("flcn.gurumaster.Enable", true)) {
             std::ostringstream ss;
             ss << "sender: " << sender << " , action: " << action;
