@@ -117,12 +117,12 @@ public:
 
     bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*sender*/, uint32 action) {
         if (sConfigMgr->GetOption<bool>("flcn.levelup.Enable", true)) {
-            if (action == 1 && player->getLevel() < 80) {
+            if (action == 1 && player->GetLevel() < 80) {
                 player->GiveLevel(80);
                 player->TeleportTo(727, 11585.527344, 12532.683594, -62.002, 5.136186);
                 player->ModifyMoney(20000000);
             }
-            else if (player->getLevel() == 80) {
+            else if (player->GetLevel() == 80) {
                 ChatHandler(player->GetSession()).SendSysMessage("You are already level 80, if you need help ask a GM.");
             }
         }
