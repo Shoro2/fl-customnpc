@@ -7,14 +7,15 @@
 #include "Config.h"
 #include "Chat.h"
 #include "ScriptedGossip.h"
+#include "Quests/QuestDef.h"
 
 // Add player scripts
 class FLCNPlayer : public PlayerScript
 {
 public:
     FLCNPlayer() : PlayerScript("FLCNPlayer") { }
-
-    void OnLogin(Player* player) override
+    /*
+    void OnPlayerLogin(Player* player) override
     {
         if (sConfigMgr->GetOption<bool>("flcn.Enable", true))
         {
@@ -34,7 +35,7 @@ public:
         }
 
     }
-
+    
     void OnPVPKill(Player* killer, Player* killed) override {
         if (sConfigMgr->GetOption<bool>("flcn.pvpevent.Enable", true))
         {
@@ -108,6 +109,7 @@ public:
             }
         }
     }
+    */
 };
 
 class FLCNLevelUpCreature : public CreatureScript {
@@ -119,8 +121,10 @@ public:
         if (sConfigMgr->GetOption<bool>("flcn.levelup.Enable", true)) {
             if (action == 1 && player->GetLevel() < 80) {
                 player->GiveLevel(80);
-                player->TeleportTo(727, 11585.527344, 12532.683594, -62.002, 5.136186);
                 player->ModifyMoney(20000000);
+                player->CompleteQuest(90154);
+                player->TeleportTo(727, 13350.215, 11989.907, -24.998, 1.343);
+                
             }
             else if (player->GetLevel() == 80) {
                 ChatHandler(player->GetSession()).SendSysMessage("You are already level 80, if you need help ask a GM.");
