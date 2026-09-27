@@ -15,6 +15,8 @@
 -- Hostile dummies: the stock Grandmaster's Training Dummy (31144, npc_training_dummy: never moves or attacks,
 --   takes no damage, leaves combat 5 s after the last hit) with level / type / name changed.
 -- Heal dummies: friendly (faction 35), SmartAI: out of combat every 10 s back to 50 % health (and at spawn);
+--   Humanoid, not Mechanical like 31144: the core makes a Mechanical creature immune to SPELL_EFFECT_HEAL
+--   (Creature::IsImmunedToSpellEffect) - Flash Heal, Chain Heal and the like would all miss;
 --   RegenHealth 0 so they do not regenerate; type_flags CREATURE_TYPE_FLAG_TREAT_AS_RAID_UNIT, which the core
 --   needs before a player may heal or buff a creature at all (Unit::_IsValidAssistTarget, PvC case) and which
 --   makes chain heals and raid-wide heals/buffs include them (Unit::IsInRaidWith); party-only effects include
@@ -56,8 +58,8 @@ INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entr
 (920016, 0, 0, 0, 0, 0, 'Humanoid Training Dummy', 'Level 80', '', 0, 80, 80, 2, 7, 0, 1, 1, 1, 1, 20, 0, 0, 1, 2200, 2000, 1, 1, 1, 131072, 2048, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0.000187, 1, 1, 1, 0, 0, 1, -26, 262144, 'npc_training_dummy', 0),
 (920017, 0, 0, 0, 0, 0, 'Mechanical Training Dummy', 'Level 80', '', 0, 80, 80, 2, 7, 0, 1, 1, 1, 1, 20, 0, 0, 1, 2200, 2000, 1, 1, 1, 131072, 2048, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0.000187, 1, 1, 1, 0, 0, 1, -26, 262144, 'npc_training_dummy', 0),
 (920018, 0, 0, 0, 0, 0, 'AoE Training Dummy', 'Level 80', '', 0, 80, 80, 2, 7, 0, 1, 1, 1, 1, 20, 0, 0, 1, 2200, 2000, 1, 1, 1, 131072, 2048, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0.000187, 1, 1, 1, 0, 0, 1, -26, 262144, 'npc_training_dummy', 0),
-(920019, 0, 0, 0, 0, 0, 'Heal Training Dummy', 'Single Target', '', 0, 80, 80, 2, 35, 0, 1, 1, 1, 1, 20, 0, 0, 1, 2200, 2000, 1, 1, 1, 131072, 2048, 0, 0, 9, 67108864, 0, 0, 0, 0, 0, 0, 0, 'SmartAI', 0, 1, 8.0, 1, 1, 1, 0, 0, 0, -26, 262144, '', 0),
-(920020, 0, 0, 0, 0, 0, 'Heal Training Dummy', 'Group Heals', '', 0, 80, 80, 2, 35, 0, 1, 1, 1, 1, 20, 0, 0, 1, 2200, 2000, 1, 1, 1, 131072, 2048, 0, 0, 9, 67108864, 0, 0, 0, 0, 0, 0, 0, 'SmartAI', 0, 1, 8.0, 1, 1, 1, 0, 0, 0, -26, 262144, '', 0);
+(920019, 0, 0, 0, 0, 0, 'Heal Training Dummy', 'Single Target', '', 0, 80, 80, 2, 35, 0, 1, 1, 1, 1, 20, 0, 0, 1, 2200, 2000, 1, 1, 1, 131072, 2048, 0, 0, 7, 67108864, 0, 0, 0, 0, 0, 0, 0, 'SmartAI', 0, 1, 8.0, 1, 1, 1, 0, 0, 0, -26, 262144, '', 0),
+(920020, 0, 0, 0, 0, 0, 'Heal Training Dummy', 'Group Heals', '', 0, 80, 80, 2, 35, 0, 1, 1, 1, 1, 20, 0, 0, 1, 2200, 2000, 1, 1, 1, 131072, 2048, 0, 0, 7, 67108864, 0, 0, 0, 0, 0, 0, 0, 'SmartAI', 0, 1, 8.0, 1, 1, 1, 0, 0, 0, -26, 262144, '', 0);
 
 -- same display as 31144 (CreatureDisplayID 16074), rooted like 31144
 INSERT INTO `creature_template_model` (`CreatureID`, `Idx`, `CreatureDisplayID`, `DisplayScale`, `Probability`, `VerifiedBuild`) VALUES
