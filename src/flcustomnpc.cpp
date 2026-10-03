@@ -8,6 +8,11 @@
 #include "Chat.h"
 #include "ScriptedGossip.h"
 #include "Quests/QuestDef.h"
+#include "CreatureScript.h"
+#include "PassiveAI.h"
+#include "MoveSpline.h"
+#include "SpellInfo.h"
+#include <unordered_map>
 
 // Add player scripts
 class FLCNPlayer : public PlayerScript
@@ -188,6 +193,142 @@ public:
     }
 };
 
+// Knockback Training Dummy (TA-2, class test area on map 13): a training dummy that knockback spells move.
+//
+// Like the stock npc_training_dummy (src/server/scripts/World/npcs_special.cpp) - a NullCreatureAI, so it never
+// attacks, chases or turns to a victim; every hit is set to 0 damage; it leaves combat with an attacker 5 s after
+// that attacker's last direct hit - but its template is not rooted and not knockback-immune, so a knockback moves it.
+// Then, while it is in combat, it teleports back to its home position (spawn point and facing) every 10 s, and
+// when its combat ends it evades and teleports home at once.
+struct npc_fl_knockback_dummy : public NullCreatureAI
+{
+    static constexpr Milliseconds COMBAT_HOLD = 5s;   // the stock dummy's: no hit for 5 s ends combat with that attacker
+    static constexpr Milliseconds RETURN_EVERY = 10s; // in combat: back to the home position every 10 s
+
+    explicit npc_fl_knockback_dummy(Creature* creature) : NullCreatureAI(creature) { }
+
+    void Reset() override
+    {
+        _combatTimer.clear();
+        _inCombat = false;
+        _returnTimer = RETURN_EVERY;
+    }
+
+    void JustEnteredCombat(Unit* who) override
+    {
+        _combatTimer[who->GetGUID()] = COMBAT_HOLD;
+    }
+
+    void DamageTaken(Unit* attacker, uint32& damage, DamageEffectType damageType, SpellSchoolMask /*schoolMask*/) override
+    {
+        damage = 0;
+
+        if (!attacker || damageType == DOT)
+            return;
+
+        Hit(attacker);
+    }
+
+    // A knockback without damage (or any other hostile spell) keeps its caster's combat alive as a damaging hit does.
+    void SpellHit(Unit* caster, SpellInfo const* spellInfo) override
+    {
+        if (!caster || !spellInfo || spellInfo->IsPositive())
+            return;
+
+        Hit(caster);
+    }
+
+    void UpdateAI(uint32 diff) override
+    {
+        // the stock dummy's per-attacker combat timers; a reference without a timer (combat that reached us without
+        // JustEnteredCombat, e.g. through a pet) gets one too, so combat always ends 5 s after the last hit
+        for (auto const& pveRef : me->GetCombatManager().GetPvECombatRefs())
+            _combatTimer.try_emplace(pveRef.first, COMBAT_HOLD);
+
+        for (auto itr = _combatTimer.begin(); itr != _combatTimer.end();)
+        {
+            itr->second -= Milliseconds(diff);
+            if (itr->second <= 0s)
+            {
+                auto const& pveRefs = me->GetCombatManager().GetPvECombatRefs();
+                auto it = pveRefs.find(itr->first);
+                if (it != pveRefs.end())
+                    it->second->EndCombat();
+
+                itr = _combatTimer.erase(itr);
+            }
+            else
+                ++itr;
+        }
+
+        if (me->IsInCombat())
+        {
+            if (!_inCombat)
+            {
+                _inCombat = true;
+                _returnTimer = RETURN_EVERY;
+            }
+            else
+            {
+                _returnTimer -= Milliseconds(diff);
+                if (_returnTimer <= 0s)
+                {
+                    ReturnHome();
+                    _returnTimer = RETURN_EVERY;
+                }
+            }
+        }
+        else if (_inCombat)
+        {
+            _inCombat = false;
+            EnterEvadeMode(EVADE_REASON_NO_HOSTILES); // combat is over: evade, which takes it home
+        }
+    }
+
+    // NullCreatureAI ignores evading; this dummy cleans up as any evading creature does (CreatureAI::_EnterEvadeMode:
+    // combat, evade auras, loot recipient) and then teleports home instead of walking there.
+    void EnterEvadeMode(EvadeReason why) override
+    {
+        if (!_EnterEvadeMode(why))
+            return;
+
+        ReturnHome();
+
+        // what HomeMovementGenerator<Creature>::DoFinalize does on arrival
+        me->GetCombatManager().SetEvadeState(EVADE_STATE_NONE);
+        me->ClearUnitState(UNIT_STATE_EVADE);
+        Reset();
+    }
+
+private:
+    void Hit(Unit* attacker)
+    {
+        if (me->GetCombatManager().IsInCombatWith(attacker))
+            _combatTimer[attacker->GetGUID()] = COMBAT_HOLD;
+
+        // Pet attacks engage the owner via propagation without firing JustEnteredCombat here, so track the owner's
+        // timer too (as the stock dummy does).
+        if (Unit* owner = attacker->GetCharmerOrOwner())
+            if (me->GetCombatManager().IsInCombatWith(owner))
+                _combatTimer[owner->GetGUID()] = COMBAT_HOLD;
+    }
+
+    // NearTeleportTo ends a knockback still in flight (Unit::DisableSpline) and sends the teleport to the clients.
+    void ReturnHome()
+    {
+        Position const& home = me->GetHomePosition();
+        float const turn = Position::NormalizeOrientation(me->GetOrientation() - home.GetOrientation());
+        bool const facingHome = turn < 0.01f || turn > 2.0f * float(M_PI) - 0.01f;
+        if (me->GetExactDist(&home) < 0.05f && facingHome && me->movespline->Finalized())
+            return; // already there: nothing to send
+
+        me->NearTeleportTo(home.GetPositionX(), home.GetPositionY(), home.GetPositionZ(), home.GetOrientation());
+    }
+
+    std::unordered_map<ObjectGuid, Milliseconds> _combatTimer;
+    bool _inCombat = false;
+    Milliseconds _returnTimer = RETURN_EVERY;
+};
 
 // Add all scripts in one
 void AddFLCNScripts()
@@ -195,4 +336,5 @@ void AddFLCNScripts()
     new FLCNPlayer();
     new FLCNLevelUpCreature();
     new FLCNGuruMaster();
+    RegisterCreatureAI(npc_fl_knockback_dummy);
 }

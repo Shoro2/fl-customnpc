@@ -1,0 +1,93 @@
+# TA-2 (class test area, map 13, .tele classtest): the Knockback Training Dummy, fl-customnpc entry 920021
+# (C++ AI npc_fl_knockback_dummy), played by server-side test bots (mod-fl-testbots, T1).
+# Canonical copy: fl-customnpc tests/; run from modules/mod-woodworking/tests/ta2_knockback_dummy.tbs until
+# TestBots.ScenarioDirs lists fl-customnpc/tests.
+#   1  in combat: a knockback (Thunderstorm 59159, 30 yd/s, ~19 yd) moves the dummy; the AI teleports it back to its
+#      spawn point within 10 s of the combat start (<= 11 s after the knock), facing restored, still in combat.
+#      Lightning Bolt (49238) hits keep the combat alive (the stock dummy's 5 s rule).
+#   2  out of combat: knocked back once more and then left alone, it leaves combat 5 s later and is home at once
+#      (the evade path; the 10 s in-combat timer cannot have fired yet).
+#   3  an existing TA-1 dummy (L80, 920008, rooted) does not move under the same knockback.
+# Distances are the director's `.distance` "(3D)" value (centre distance minus both combat reaches): the director
+# stands 6 yd west of the dummy, the shaman 3 yd west of it, so the knock carries the dummy away from both.
+name    TA-2 knockback training dummy: knocked back, home within 10 s in combat, home on evade; L80 dummy unchanged
+timeout 120s
+group   party
+bot sh shaman
+
+place 13 -245 -289 -422.72
+pick kb creature:920021
+require kb exists
+pick d80 creature:920008
+require d80 exists
+track kb
+track d80
+waitfor kb outofcombat timeout 10s
+require kb near -245 -295 -423.22 0.5
+mark home
+
+# --- 1: knockback in combat, back home by the 10 s timer, still in combat ----------------------------------------
+do sh approach kb 3
+do sh cast 49238 on kb triggered
+wait 1s
+expect kb incombat
+do gm target kb
+as gm .distance
+log before the knockback (director to dummy)
+expect output value (3D) < 9
+do sh cast 59159 triggered
+wait 1500ms
+do gm target kb
+as gm .distance
+log 1.5 s after Thunderstorm
+expect output value (3D) > 15
+expect kb incombat
+do sh cast 49238 on kb triggered
+wait 2500ms
+do sh cast 49238 on kb triggered
+wait 2500ms
+do sh cast 49238 on kb triggered
+log waiting for the in-combat return (the knock was ~6.5 s ago; the timer fires 10 s after the combat start)
+waitfor kb at home 1 timeout 4s
+expect kb incombat
+do gm target kb
+as gm .gps
+log facing after the return (spawn orientation 1.5708)
+expect output value Orientation > 1.56
+expect output value Orientation < 1.58
+wait 2s
+log 2 s later: no chase, no attack
+expect kb at home 0.5
+expect kb alive
+expect kb health == 100%
+expect sh health == 100%
+
+# --- 2: out of combat: the evade takes it home -------------------------------------------------------------------
+waitfor kb outofcombat timeout 8s
+expect kb at home 1
+do sh cast 59159 triggered
+wait 1500ms
+do gm target kb
+as gm .distance
+log 1.5 s after the second Thunderstorm (no further hits)
+expect output value (3D) > 15
+expect kb incombat
+waitfor kb outofcombat timeout 6s
+log combat over: home at once
+expect kb at home 1
+expect kb alive
+
+# --- 3: the existing L80 Training Dummy is unchanged (rooted, not knocked back) ---------------------------------
+do sh approach d80 3
+do sh cast 59159 triggered
+wait 1500ms
+log L80 dummy 1.5 s after Thunderstorm
+expect d80 incombat
+expect d80 at home 0.2
+expect d80 health == 100%
+
+cleanup
+do sh stop
+waitfor kb outofcombat timeout 10s
+expect kb at home 1
+log done
