@@ -1,0 +1,23 @@
+# Log (newest first)
+
+- 2026-10-03 test(ta2): let the approach teleport land before casting (09eeb31)
+- 2026-10-03 feat(data): add knockback training dummies to the class test area (5bd047f)
+- 2026-09-27 fix(data): make the heal dummies humanoid so that heals land (90f93cc)
+- 2026-09-27 feat(data): add a class and spell test area on map 13 (.tele classtest) (fef3ed8)
+- 2026-07-11 feat(SQL): port base data to current AC schema at modern path (013f11a)
+- 2026-07-09 feat(Port): migrate to current AzerothCore API (e50a455)
+
+## Legacy history (old FL fork, before the 2026-07 port)
+
+- 2023-02-26 overrides (91384b8)
+- 2023-02-26 update getlevel for new core (0ea9951)
+- 2023-02-18 infernal sql update (6983556)
+- 2023-02-17 res (ad953d1)
+- 2023-02-17 no attack by infernal (f05886f)
+- 2023-02-17 sql (410de64)
+- 2023-02-17 update sql (b51ec73)
+- 2023-02-17 uncomment (9abd0fe)
+- 2023-02-17 Update README.md (6deefda)
+- 2023-02-17 ressurect player (2bdf900)
+- 2023-02-16 init (0d8898b)
+- 2023-02-16 Initial commit - fl-customnpc (d24e31b)
