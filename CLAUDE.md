@@ -1,5 +1,11 @@
 # fl-customnpc
 
+> **Internal docs live in the vault, not here** (rule since 2026-10-18: this public repo keeps only
+> README.md with the general info and installation, this CLAUDE.md, the license and the code).
+> Index, data structure, functions, log and todo: share-public `docs/World of Warcraft/module-repos/fl-customnpc/`
+> (local checkout `C:\Users\Anwender\Documents\GitHub\share-public`). Update them there,
+> in a vault worktree, in the same session as the code change.
+
 Custom NPC scripts from the old Forgotten Land fork, plus a class / spell test area. Players meet
 **Sesame** ("Instant 80") on the Azealia hub (map 727): one gossip click takes a character below
 80 to level 80, adds 2000 gold, completes quest 90154 "The Exobeast Land" and teleports it to a
@@ -59,7 +65,7 @@ commented-out code and was never shipped.
 3. README lists the Gurubashi kill-streak announcer and arena resurrection, which are commented
    out in `FLCNPlayer`; revive or drop them (todo).
 
-Open points in full: [todo.md](todo.md).
+Open points in full: [todo.md](https://github.com/Shoro2/share-public/blob/main/docs/World%20of%20Warcraft/module-repos/fl-customnpc/todo.md).
 
 ## Working here
 
@@ -76,5 +82,5 @@ Open points in full: [todo.md](todo.md).
 - Vault: `forgotten-land/06-fl-modules.md`, `12-server-todo.md`, MIG-040 in
   `forgotten-land/15-host-migration-log.md`, `coa-classes/program-records/ta1-report.md`,
   `testing/01-test-bots.md`.
-- Doc set: [INDEX.md](INDEX.md), CLAUDE.md, [data_structure.md](data_structure.md),
-  [functions.md](functions.md), [log.md](log.md) (newest first), [todo.md](todo.md).
+- Doc set: [INDEX.md](https://github.com/Shoro2/share-public/blob/main/docs/World%20of%20Warcraft/module-repos/fl-customnpc/00-index.md), CLAUDE.md, [data_structure.md](https://github.com/Shoro2/share-public/blob/main/docs/World%20of%20Warcraft/module-repos/fl-customnpc/data_structure.md),
+  [functions.md](https://github.com/Shoro2/share-public/blob/main/docs/World%20of%20Warcraft/module-repos/fl-customnpc/functions.md), [log.md](https://github.com/Shoro2/share-public/blob/main/docs/World%20of%20Warcraft/module-repos/fl-customnpc/log.md) (newest first), [todo.md](https://github.com/Shoro2/share-public/blob/main/docs/World%20of%20Warcraft/module-repos/fl-customnpc/todo.md).
