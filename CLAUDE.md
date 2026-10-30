@@ -26,6 +26,7 @@ its home because the content is data-only module SQL plus one small AI.
 | Sesame | creature 8999948, ScriptName `FLCNLevelUpCreature`, gossip menu 62002; spawn guid 5300690 (map 727) |
 | Arena Master | creature 8999949, ScriptName `FLCNGuruMaster`, gossip menu 62001; spawn guid 5300691 (map 727) |
 | Infernal | creature 510006 (CombatAI), summoned by the demon portal option |
+| Ferry masters | creatures 727410 Dockmaster Hale / 727411 Dockmaster Ulrik, ScriptName `FLCNFerryMaster`, npc_text + gossip menu 727410 / 727411, guids 7274000 / 7274001 (map 727, Port Blue Ocean's ferry 727400; 2026-10-30) |
 | Arena props | stock GameObjects 183492 (tree), 194534 (camp fire), 183490 (elevator), 185589 (demon portal) |
 | Quest | 90154 "The Exobeast Land" (FL world content) |
 | Test area NPCs | 920000-920020 (TA-1, `npc_training_dummy`; heal dummies 920019/920020 SmartAI), 920021 Knockback Training Dummy (TA-2, `npc_fl_knockback_dummy`) |

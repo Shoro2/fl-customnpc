@@ -11,6 +11,10 @@ Custom NPCs for AzerothCore, plus a spell / class test area. Part of the Forgott
   sure?" box: a forest (seven trees and a camp fire), an elevator, or a demon portal with a small Infernal (creature
   510006). The props use stock gameobjects 183492, 194534, 183490 and 185589 and are placed at hard-coded
   Gurubashi Arena coordinates on the map the NPC stands on.
+- **Ferry masters** (script `FLCNFerryMaster`): an NPC on a pier of a continent transport tells the player when the
+  ship docks there or casts off - read live from the transport on the NPC's map (its path progress against the
+  arrival and departure times of the transport's stop nearest to the NPC). The NPC's gossip text names the
+  destination. Forgotten Land uses it on both piers of its Port Blue Ocean ferry (creatures 727410 and 727411).
 - **Class / spell test area** on the stock test map 13 (data only, no code): hostile training dummies by level
   (1, 10, ... 80 and a boss-level one) and by creature type, a pack of eight for AoE tests, and friendly heal dummies
   that fall back to 50 % health every 10 seconds. Reach it with `.tele classtest`.
@@ -54,6 +58,8 @@ Custom NPCs for AzerothCore, plus a spell / class test area. Part of the Forgott
 
 - The module does not spawn Sesame or the Arena Master. Add them where you want them with a GM account, for example
   `.npc add 8999948` and `.npc add 8999949`.
+- Ferry masters: give any creature `ScriptName = 'FLCNFerryMaster'`, npcflag 1 and a gossip text, and place it
+  within 120 yards of a stop (a TaxiPathNode with flag 2) of a continent transport on the same map.
 - Test area: `.tele classtest` takes a GM to the dummies on map 13; `.tele test` keeps working for the stock test room.
   Attack a dummy with the spell you want to test. Reserved id ranges: NPCs 920000-920099, creature guids
   8920000-8920099, `game_tele` 92000-92099.

@@ -12,6 +12,7 @@
 #include "PassiveAI.h"
 #include "MoveSpline.h"
 #include "SpellInfo.h"
+#include "Transport.h"
 #include <unordered_map>
 
 // Add player scripts
@@ -330,11 +331,84 @@ private:
     Milliseconds _returnTimer = RETURN_EVERY;
 };
 
+// Ferry master: tells a player when the ship on this pier's continent transport arrives or leaves.
+// The transport is found on the NPC's own map; the pier is the transport's stop nearest to the NPC, so one script
+// serves every berth (Port Blue Ocean <-> Kalu'thar Haven, gameobject 727400, 2026-10-30). Times come from the
+// transport itself (path progress against the stop's arrival and departure times), the gossip text (npc_text) names
+// the destination.
+class FLCNFerryMaster : public CreatureScript
+{
+public:
+    FLCNFerryMaster() : CreatureScript("FLCNFerryMaster") { }
+
+    static constexpr float MaxStopDistance = 120.0f;   // a stop farther away than this is not this pier's
+
+    static std::string Duration(uint32 ms)
+    {
+        uint32 const s = (ms + 500) / 1000;
+        if (s < 20)
+            return "a few seconds";
+        if (s < 60)
+            return Acore::StringFormat("about {} seconds", (s + 5) / 10 * 10);
+        uint32 const m = s / 60;
+        uint32 const r = (s % 60 + 5) / 10 * 10;
+        if (r == 0 || r == 60)
+            return Acore::StringFormat("about {} minute{}", m + (r == 60 ? 1 : 0), (m + (r == 60 ? 1 : 0)) == 1 ? "" : "s");
+        return Acore::StringFormat("about {} min {} s", m, r);
+    }
+
+    static std::string Status(Creature* creature)
+    {
+        for (Transport* transport : creature->GetMap()->GetAllTransports())
+        {
+            MotionTransport* ship = transport->ToMotionTransport();
+            if (!ship || ship->GetPeriod() == 0)
+                continue;
+            KeyFrame const* pier = nullptr;
+            float best = MaxStopDistance;
+            for (KeyFrame const& frame : ship->GetKeyFrames())
+            {
+                if (!frame.IsStopFrame() || frame.Node->mapid != creature->GetMapId())
+                    continue;
+                float const d = creature->GetExactDist2d(frame.Node->x, frame.Node->y);
+                if (d < best)
+                {
+                    best = d;
+                    pier = &frame;
+                }
+            }
+            if (!pier)
+                continue;
+            uint32 const period = ship->GetPeriod();
+            uint32 const now = ship->GetPathProgress() % period;
+            if (now >= pier->ArriveTime && now < pier->DepartureTime)
+                return "The ship is at the pier - it casts off in " + Duration(pier->DepartureTime - now) + ".";
+            return "The next ship docks here in " + Duration((pier->ArriveTime + period - now) % period) + ".";
+        }
+        return "No ship calls at this pier right now.";
+    }
+
+    bool OnGossipHello(Player* player, Creature* creature) override
+    {
+        ClearGossipMenuFor(player);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Status(creature), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        SendGossipMenuFor(player, player->GetGossipTextId(creature), creature->GetGUID());
+        return true;
+    }
+
+    bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*sender*/, uint32 /*action*/) override
+    {
+        CloseGossipMenuFor(player);
+        return true;
+    }
+};
+
 // Add all scripts in one
 void AddFLCNScripts()
 {
     new FLCNPlayer();
     new FLCNLevelUpCreature();
     new FLCNGuruMaster();
+    new FLCNFerryMaster();
     RegisterCreatureAI(npc_fl_knockback_dummy);
 }
