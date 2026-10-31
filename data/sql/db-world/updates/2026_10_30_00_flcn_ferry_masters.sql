@@ -1,4 +1,4 @@
--- fl-customnpc: two ferry masters for the Port Blue Ocean ferry (map 727, gameobject 727400).
+-- fl-customnpc: two ferry masters for the Blueocean Port ferry (map 727, gameobject 727400).
 -- Each stands on its pier and tells a player when the ship docks or casts off (script FLCNFerryMaster reads the
 -- transport's own path progress); the gossip text names the destination. Ids: creature 727410-727411, npc_text and
 -- gossip menu 727410-727411, creature guids 7274000-7274001 (share-public 06-custom-ids). Idempotent.
@@ -18,7 +18,7 @@ INSERT INTO `creature_template_model` (`CreatureID`, `Idx`, `CreatureDisplayID`,
 DELETE FROM `npc_text` WHERE `ID` IN (727410, 727411);
 INSERT INTO `npc_text` (`ID`, `text0_0`, `BroadcastTextID0`, `lang0`, `Probability0`, `VerifiedBuild`) VALUES
 (727410, 'Ahoy, $c! The ship at this pier sails to Kalu''thar Haven and back, round the clock. Board her through the gap in her rail when she lies alongside.', 0, 0, 1, 12340),
-(727411, 'Ahoy, $c! The ship at this pier sails to Port Blue Ocean and back, round the clock. Board her through the gap in her rail when she lies alongside.', 0, 0, 1, 12340);
+(727411, 'Ahoy, $c! The ship at this pier sails to Blueocean Port and back, round the clock. Board her through the gap in her rail when she lies alongside.', 0, 0, 1, 12340);
 
 DELETE FROM `gossip_menu` WHERE `MenuID` IN (727410, 727411);
 INSERT INTO `gossip_menu` (`MenuID`, `TextID`) VALUES

@@ -333,7 +333,7 @@ private:
 
 // Ferry master: tells a player when the ship on this pier's continent transport arrives or leaves.
 // The transport is found on the NPC's own map; the pier is the transport's stop nearest to the NPC, so one script
-// serves every berth (Port Blue Ocean <-> Kalu'thar Haven, gameobject 727400, 2026-10-30). Times come from the
+// serves every berth (Blueocean Port <-> Kalu'thar Haven, gameobject 727400, 2026-10-30). Times come from the
 // transport itself (path progress against the stop's arrival and departure times), the gossip text (npc_text) names
 // the destination.
 class FLCNFerryMaster : public CreatureScript
